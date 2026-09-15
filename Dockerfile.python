@@ -1,0 +1,21 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Install OpenCV system dependencies and curl
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1 \
+    libglib2.0-0 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt ./
+RUN pip install --default-timeout=1000 --retries=10 --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 5678
+
+ENV FASTAPI_PORT=5678
+
+CMD ["python", "__main__.py", "--host", "0.0.0.0", "--port", "5678"]

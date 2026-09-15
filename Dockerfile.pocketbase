@@ -1,0 +1,21 @@
+FROM alpine:latest
+
+ARG PB_VERSION=0.22.18
+
+RUN apk add --no-cache \
+    ca-certificates \
+    unzip \
+    wget \
+    zip
+
+# Download and install PocketBase binary
+ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
+RUN unzip /tmp/pb.zip -d /usr/local/bin/ && \
+    rm /tmp/pb.zip && \
+    chmod +x /usr/local/bin/pocketbase
+
+WORKDIR /app
+
+EXPOSE 8099
+
+CMD ["pocketbase", "serve", "--http=0.0.0.0:8099", "--dir=/app/pb_data"]

@@ -1,0 +1,43 @@
+services:
+  pocketbase:
+    build:
+      context: .
+      dockerfile: Dockerfile.pocketbase
+    container_name: segmentation_studio_pocketbase
+    ports:
+      - "8099:8099"
+    volumes:
+      - ./pb_data:/app/pb_data
+      - ./pb_migrations:/app/pb_migrations
+    restart: unless-stopped
+
+  ai-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    container_name: segmentation_studio_ai
+    ports:
+      - "5678:5678"
+    environment:
+      - FASTAPI_PORT=5678
+    volumes:
+      - ./__storage__:/app/__storage__
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: segmentation_studio_web
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - POCKETBASE_URL=http://pocketbase:8099
+      - FASTAPI_WORKER_URL=http://ai-service:5678
+    volumes:
+      - ./__storage__:/app/__storage__
+    depends_on:
+      - pocketbase
+      - ai-service
+    restart: unless-stopped
