@@ -56,7 +56,6 @@ __pycache__/
 # Local runtime logs & state
 *.log
 logs/
-.workers.json
 
 # Local Storage (Images & sidecars)
 __storage__/*

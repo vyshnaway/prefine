@@ -129,7 +129,7 @@ The vectorization stage converts raster masks into clean topological vectors in 
 ## 4. Distributed AI Segmentation & Worker Balancing
 
 1. **Auto-Discovery & Custom Workers**:
-   - Next.js can communicate with local FastAPI (`http://127.0.0.1:5678`) or remote GPU inference clusters configured in `.workers.json` or through the Admin workspace.
+       - Next.js can communicate with local FastAPI (`http://127.0.0.1:5678`) or remote GPU inference clusters configured through the Admin workspace and persisted in PocketBase.
 2. **Distributed Ingestion Pipeline**:
    - Workloads are chunked and distributed across healthy online workers with automatic fallback on timeout or error.
 3. **4-Way Rotational TTA**:
